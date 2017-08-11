@@ -567,11 +567,11 @@ ARM Macro Assembler    Page 9
               00000000 
 Command Line: --debug --xref --cpu=Cortex-M0+ --apcs=interwork --depend=.\objec
 ts\startup_mkl46z4.d -o.\objects\startup_mkl46z4.o -IC:\Users\Vinh\Desktop\gst\
-Mock-project\ecample\blinkyLED\RTE -Id:\Keil_v5\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS\
-Include -Id:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.4.0\Device\Include --pred
-efine="__EVAL SETA 1" --predefine="_RTE_ SETA 1" --predefine="MKL46Z128xxx4 SET
-A 1" --list=.\listings\startup_mkl46z4.lst RTE\Device\MKL46Z128xxx4\startup_MKL
-46Z4.s
+Mock-project\ecample\toggle\RTE -Id:\Keil_v5\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS\Inc
+lude -Id:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.4.0\Device\Include --predefi
+ne="__EVAL SETA 1" --predefine="_RTE_ SETA 1" --predefine="MKL46Z128xxx4 SETA 1
+" --list=.\listings\startup_mkl46z4.lst RTE\Device\MKL46Z128xxx4\startup_MKL46Z
+4.s
 
 
 
