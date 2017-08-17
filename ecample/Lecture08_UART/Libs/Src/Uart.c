@@ -23,7 +23,7 @@ void UART0_Init(void)
 {
 	char dummy;
 	/* Enable clock gate UART0 */
-  SIM->SCGC4 |=   1UL << 10; 
+  SIM->SCGC4 |=   1UL << 10; 		//system clk gating control SCGC - uart0 mode- pg 214
   
 	/* Choose MCGFLLCLK/2 (48MHz/2) */	
   SIM->SOPT2 |= 1UL << 16;     
@@ -38,14 +38,14 @@ void UART0_Init(void)
 	UART0->BDL = 0x1A;//26 ???
 
 	/* UART0 control */
-	UART0->C1 = 0x00;
-	UART0->C2 = 0x00;
+	UART0->C1 = 0x00;			//contol reg
+	//UART0->C2 = 0x00;
 	UART0->C3 = 0x00;
 	UART0->C4 = 0x0F; /* OSR = 15 */
 	UART0->C5 = 0x00;
 	
 	/* Enable UART0 transmit/receive */
-	UART0->C2 |= 0x03 << 2;
+	UART0->C2 = 0x03 << 2;
 	
 	/* Dummy read to ensure UART0 
 	   receive buffer is empty already */
@@ -58,6 +58,7 @@ void UART0_Init(void)
  * @param[in,out] void
  * @return        void
  */
+
 void UART0_PutChar(char c)
 {
 	UART0->D   = c;
@@ -81,6 +82,7 @@ char UART0_GetChar(void)
 /**
  * @brief file handle structure
  */
+/*
 struct __FILE 
 { 
 	int handle;
@@ -88,7 +90,7 @@ struct __FILE
 
 FILE __stdout;
 FILE __stdin;
-	
+	*/
 
 /**
  * @brief         fputc
@@ -108,15 +110,8 @@ int fputc(int ch, FILE *f)
  * @param[in,out] void
  * @return        char
  */
-int fgetc(FILE *f) {
-	
-	char c;
-	/* get key */
-	c =  UART0_GetChar();
-	/* print echo */
-	UART0_PutChar(c);
-  return (int)c;
-}
+
+
 /**
  * @brief         UART0RX_GetFlagIRQ
  * @param[in]     void
@@ -148,7 +143,7 @@ void UART0RX_ClearFlagIRQ(void){
  * @return        void
  */
 void UART0RX_EnableIRQ(void){
-	UART0->C2 |= UART0_C2_RIE_MASK;
+	//UART0->C2 |= UART0_C2_RIE_MASK;
 	NVIC_SetPriority(UART0_IRQn,2);
 	NVIC_EnableIRQ(UART0_IRQn);
 }
