@@ -55,7 +55,7 @@
 
 #define DISABLE_WDOG    1
 
-#define CLOCK_SETUP     0
+#define CLOCK_SETUP     1
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
@@ -105,9 +105,9 @@ void SystemInit (void) {
   /* SIM_COPC: COPT=0,COPCLKS=0,COPW=0 */
   SIM->COPC = (uint32_t)0x00u;
 #endif /* (DISABLE_WDOG) */
-#if (CLOCK_SETUP == 0)
+#if (CLOCK_SETUP == 1)
   /* SIM->CLKDIV1: OUTDIV1=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,OUTDIV4=2,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0 */
-  SIM->CLKDIV1 = (uint32_t)0x00020000UL; /* Update system prescalers */
+  SIM->CLKDIV1 = (uint32_t)0x00010000UL; /* Update system prescalers */
   /* Switch to FEI Mode */
   /* MCG->C1: CLKS=0,FRDIV=0,IREFS=1,IRCLKEN=1,IREFSTEN=0 */
   MCG->C1 = (uint8_t)0x06U;
@@ -117,8 +117,8 @@ void SystemInit (void) {
   MCG->C4 = (uint8_t)((MCG->C4 & (uint8_t)~(uint8_t)0xC0U) | (uint8_t)0x20U);
   /* OSC0->CR: ERCLKEN=1,??=0,EREFSTEN=0,??=0,SC2P=0,SC4P=0,SC8P=0,SC16P=0 */
   OSC0->CR = (uint8_t)0x80U;
-  /* MCG->C5: ??=0,PLLCLKEN0=0,PLLSTEN0=0,PRDIV0=0 */
-  MCG->C5 = (uint8_t)0x00U;
+  /* MCG->C5: ??=0,PLLCLKEN0=0,PLLSTEN0=0,PRDIV0=3 */
+  MCG->C5 = (uint8_t)0x03U;
   /* MCG->C6: LOLIE0=0,PLLS=0,CME0=0,VDIV0=0 */
   MCG->C6 = (uint8_t)0x00U;
   while((MCG->S & MCG_S_IREFST_MASK) == 0x00U) { /* Check that the source of the FLL reference clock is the internal reference clock. */

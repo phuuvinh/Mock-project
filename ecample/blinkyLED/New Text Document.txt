@@ -1,0 +1,89 @@
+
+#include "MKL46Z4.h"                    // Device header
+
+#define LED_NUM     2                   /* Number of user LEDs                */
+const uint32_t led_mask[] = {1UL << 5, 1UL << 29};		//1UL = 01 unsigned long int	
+volatile uint32_t msTicks;                            /* counts 1ms timeTicks */
+/*----------------------------------------------------------------------------
+  SysTick_Handler
+ *----------------------------------------------------------------------------*/
+
+void SysTick_Handler(void) {
+  msTicks++;                        /* increment counter necessary in Delay() */
+}
+
+/*------------------------------------------------------------------------------
+  delays number of tick Systicks (happens every 1 ms)
+ *------------------------------------------------------------------------------*/
+__INLINE static void Delay (uint32_t dlyTicks) {
+  uint32_t curTicks;
+
+  curTicks = msTicks;
+  while ((msTicks - curTicks) < dlyTicks);
+}
+
+/*------------------------------------------------------------------------------
+  Configure LED pins
+ *------------------------------------------------------------------------------*/
+__INLINE static void LED_Config(void) {
+
+	SIM->SCGC5 |=SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTE_MASK; //Enable Clock for port D and port E
+  
+  PORTD->PCR[5]  = (1UL <<  8);                      /* Pin is GPIO */
+  PORTE->PCR[29] = (1UL <<  8);                      /* Pin is GPIO */
+
+  PTD->PDOR = led_mask[0];                           /*  LEDs off  */
+  PTE->PDOR = led_mask[1];                       
+
+  PTD->PDDR = led_mask[0];                           /* enable Output  */
+  PTE->PDDR = led_mask[1];                       
+}
+
+//phaseA: both led 1 and led 2 are off
+__INLINE static void phaseA ( )
+{
+		PTE->PDOR = led_mask[1];
+		PTD->PDOR = led_mask[0];
+	 Delay(0x250);    			//delay 500ms
+}
+//phase B led 2 is on and led 1 is off
+__INLINE static void phaseB ( )
+{
+		PTE->PDOR = led_mask[1];
+		PTD->PCOR = led_mask[0];
+	 Delay(0x250);    
+}
+//led 2 is off, led 1 is on 
+__INLINE static void phaseC ( )
+{
+		PTE->PCOR = led_mask[1];
+		PTD->PDOR =led_mask[0];
+	 Delay(0x250);    
+}
+//both led 1 and led 2 are on
+__INLINE static void phaseD ( )
+{
+		PTE->PCOR = led_mask[1];
+		PTD->PCOR =led_mask[0];
+	 Delay(0x250);    
+}
+/*----------------------------------------------------------------------------
+  MAIN function
+ *----------------------------------------------------------------------------*/
+
+int main (void) {	
+
+  SystemCoreClockUpdate();                      /* Get Core Clock Frequency */
+  SysTick_Config(SystemCoreClock/1000);         /* Generate interrupt each 1 ms    */
+  
+  LED_Config();                             
+  while(1) {
+		phaseD();
+		phaseC();
+		phaseB();
+		phaseA();
+	
+		}
+  return 0;
+}
+

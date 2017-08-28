@@ -1,5 +1,6 @@
 --cpu Cortex-M0+
 ".\objects\main.o"
+".\objects\uart.o"
 "d:\Keil_v5\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS\Lib\ARM\arm_cortexM0l_math.lib"
 ".\objects\startup_mkl46z4.o"
 ".\objects\system_mkl46z4.o"

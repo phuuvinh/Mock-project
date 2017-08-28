@@ -2,7 +2,7 @@
 
 char data;
 int x = 0;
-/*	
+
 void UART0_IRQHandler()
 {
 		data = UART0_GetChar();
@@ -11,7 +11,7 @@ void UART0_IRQHandler()
 		else
 			x = 2;
 }
-*/
+
 int main(void)
 {
 	
@@ -21,9 +21,10 @@ int main(void)
 	/*Init UART0*/
 	UART0_PinConf();
 	UART0_Init(); 
-	
+	UART0RX_EnableIRQ();
 	
 	printf("\r\nhello world.....");
+	
 	while (1)
 	{
 //		data = UART0_GetChar();

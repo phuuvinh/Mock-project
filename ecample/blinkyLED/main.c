@@ -1,71 +1,39 @@
-/**************************************************************************
-* 
-* Author: Nguyen Van Quan
-* Module Name : Ass3_2
-*
-* Description :
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-Assignment 2: Write an example to control LEDs by buttons.
-Description
-Create a Keil project for FRD KL46Z256 board
- 	Implement the code to control LEDs by buttons. Press button to turn on LED; Release button to turn off LED. 
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-*
-* Mod. History : 10- 06 - 2016 - Nguyen Van Quan
-*
-* --
-************************************************************************/
-
 #include "MKL46Z4.h"                    // Device header
-void Delay(int runtime)
+
+void InitLED(void)
 {
-	int i;
-	for (i=runtime*10000;i!=0;i--){;}
+
+  SIM->SCGC5=SIM_SCGC5_PORTD_MASK;	//Clock to PortD
+  PORTD->PCR[5]=1<<8 ;							//PIN 5 of portd as GPIO
+  PTD->PDDR=(1u<<5);								//PIN 5 of portd as OUTPUT
+
 }
-/*FUNCTION**********************************************************************
- *
- * Function Name : InitLedGreen()
- * Description: khoi tao Led Green
- *
- *END**************************************************************************/
-void InitLedGreen()
+
+void InitSW1(void)
 {
-	SIM->SCGC5|=SIM_SCGC5_PORTD_MASK;				// CHO PHEP XUNG CLOCK HOAT DONG
-	PORTD->PCR[5]|=PORT_PCR_MUX(1);					// THIET LAP CHAN GPIO
-	PTD->PDDR|=(1<<5);												// CAU HINH CHAN RA
-	
+  SIM->SCGC5=SIM_SCGC5_PORTC_MASK;//Clock to PortC
+  PORTC->PCR[3]=1UL<<8 | 3;//PIN 5 of portd as GPIO
+  PTC->PDDR=(0u<<3);//PIN 5 of portd as INPUT
 }
-/*FUNCTION**********************************************************************
- *
- * Function Name : InitSW1
- * Description: khoi tao nut nhan
- *
- *END**************************************************************************/
-void InitSW1()
-{
-		SIM->SCGC5|=SIM_SCGC5_PORTC_MASK;
-		PORTC->PCR[3]|=PORT_PCR_MUX(1)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK;
-		PTC->PDDR|=(0<<3);
-}
-/*FUNCTION**********************************************************************
- *
- * Function Name : main
- *
- *END**************************************************************************/
+
 int main()
 {
-	InitLedGreen();
-	InitSW1();
-	PTE->PSOR|=(1<<29);
-	while (1)
-	{
-		
-		if 	(((~PTC->PDIR)&(1<<12)))
+
+  while(1)
+  {
+
+		InitLED();
+		InitSW1();
+
+		if(PTC->PDIR==(0u<<3))										//switch pressed
 		{
-				PTE->PCOR=(1<<29);
+			PTD->PCOR=(1u<<5);					//LED turns on
 		}
-		PTE->PSOR=(1<<29);
-		Delay(1000);
-	}
-	return 0;
+
+		else if(PTC->PDIR==(1u<<3))									//switch not pressed
+		{
+			PTD->PSOR=(1u<<5);						//Led turns off
+		}
+  }
+return 0;
 }

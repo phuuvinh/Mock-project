@@ -35,7 +35,7 @@ void UART0_Init(void)
 	/* -> SBR = 13 */
 	/* LBKDIE = 0, RXEDGIE = 0, SBNS = 0 */
 	UART0->BDH = 0x00;
-	UART0->BDL = 0x1A;//26 ???
+	UART0->BDL = UART_BDL_SBR(0x1A)     ;//26 ???
 
 	/* UART0 control */
 	UART0->C1 = 0x00;			//contol reg
@@ -82,7 +82,7 @@ char UART0_GetChar(void)
 /**
  * @brief file handle structure
  */
-/*
+
 struct __FILE 
 { 
 	int handle;
@@ -90,7 +90,7 @@ struct __FILE
 
 FILE __stdout;
 FILE __stdin;
-	*/
+	
 
 /**
  * @brief         fputc
@@ -110,7 +110,15 @@ int fputc(int ch, FILE *f)
  * @param[in,out] void
  * @return        char
  */
-
+int fgetc(FILE *f) {
+	
+	char c;
+	/* get key */
+	c =  UART0_GetChar();
+	/* print echo */
+	UART0_PutChar(c);
+  return (int)c;
+}
 
 /**
  * @brief         UART0RX_GetFlagIRQ
@@ -143,7 +151,7 @@ void UART0RX_ClearFlagIRQ(void){
  * @return        void
  */
 void UART0RX_EnableIRQ(void){
-	//UART0->C2 |= UART0_C2_RIE_MASK;
+	UART0->C2 |= UART0_C2_RIE_MASK;
 	NVIC_SetPriority(UART0_IRQn,2);
 	NVIC_EnableIRQ(UART0_IRQn);
 }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+
+    tools:context="com.example.vinh.music.MainActivity">
+
+    <Button
+        android:id="@+id/bt_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="42dp"
+        android:background="@android:drawable/ic_media_play" />
+
+    <Button
+        android:id="@+id/bt_previous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/bt_play"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="27dp"
+        android:background="@android:drawable/ic_media_previous"
+        android:elevation="2dp" />
+
+    <Button
+        android:id="@+id/bt_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/bt_play"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="22dp"
+        android:background="@android:drawable/ic_media_next" />
+
+    <SeekBar
+        android:id="@+id/sb_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bt_play"
+        android:layout_alignEnd="@+id/bt_next"
+        android:layout_alignStart="@+id/bt_previous"
+
+        android:layout_marginBottom="37dp" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:text="00:00"
+        android:layout_above="@+id/sb_status"
+        android:layout_alignStart="@+id/sb_status"
+        android:textColor="#ffffff"/>
+
+    <TextView
+        android:id="@+id/tv_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_time"
+        android:layout_alignEnd="@+id/sb_status"
+        android:text="00:00"
+        android:textColor="#ffffff"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/tv_time"
+        android:layout_marginTop="14dp"
+        android:textColor="#ffff"
+        android:textSize="20sp"
+        android:text="Danh sách phát" />
+</RelativeLayout>
