@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        final BluetoothAdapter blAdapter = BluetoothAdapter.getDefaultAdapter();
         componentCreate();
         addSong();
         initSong();
@@ -36,9 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view){
-               //
 
-
+               //push button during playing -> pause
                 if(mediaPlay.isPlaying()){
                     mediaPlay.pause();
                     bt_play.setBackgroundResource(android.R.drawable.ic_media_play);
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     bt_play.setBackgroundResource(android.R.drawable.ic_media_pause);
                 }
                 setSongTime();
-
+                updatePlaying();
             }
         });
         bt_next.setOnClickListener(new View.OnClickListener(){
@@ -96,11 +95,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updatePlaying(){
-        android.os.Handler handle = new android.os.Handler();
+        final android.os.Handler handle = new android.os.Handler();
         handle.postDelayed(new Runnable() {
             @Override
             public void run() {
-
+                SimpleDateFormat timeformat = new SimpleDateFormat("mm:ss");
+                txt_time.setText(timeformat.format(mediaPlay.getCurrentPosition()));
+                //update seekbar's status
+                sb_stt.setProgress(mediaPlay.getCurrentPosition());
+                //play next song if the current song ends
+                mediaPlay.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        if(mediaPlay.isPlaying())
+                            mediaPlay.stop();
+                        //pos++;
+                        if(++pos > listSongs.size()-1)
+                            pos = 0;
+                        initSong();
+                        mediaPlay.start();
+                    }
+                });
+                handle.postDelayed(this,500);
             }
         },100);
     }
